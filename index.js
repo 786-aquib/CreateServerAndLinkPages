@@ -17,16 +17,7 @@ var contactList = [
         name:"Aquib",
         phone:"7754945402"
     },
-    {
-        name:"Arman",
-        phone:"45458756"
-    },
-    {
-        name:"Saba",
-        phone:"252535698"
-    },
-]
-
+]>
 app.get('/',function(req,res){
    
 

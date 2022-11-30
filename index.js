@@ -1,55 +1,77 @@
-const http = require('http');
+const express = require('express');
+const path= require('path');
 const port = 8000;
 
-const fs = require('fs');
-function requestHandler(req,res){
-    console.log(req.url);
+const db = require('./config/mongoose');
+const Contact = require('./models/contact');
+const app=express();
 
-   res.writeHead(200,{'content-type': 'text.html'});
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.urlencoded());
 
-let filePath;
-switch(req.url){
-    case'/':
-    filePath='./index.html';
-    break;
-    case'/profile':
-    filePath='./profile.html';
-    break;
-    default:
-     filePath='./404.html';
-}
-fs.readFile(filePath,function(err,data){
-    if(err){
-         console.log('error',err);
-        return res.end('<h1>Error</h1>');
-    }
-    return res.end(data);
-})
+app.use(express.static('assets'));
 
+var contactList = [
+{
+        name:"Aquib",
+        phone:"7754945402"
+    },
+    {
+        name:"Arman",
+        phone:"45458756"
+    },
+    {
+        name:"Saba",
+        phone:"252535698"
+    },
+]
 
-}
+app.get('/',function(req,res){
+   
 
-const server = http.createServer(requestHandler);
-
-
-
-
-// const server = http.createServer();
-
-server.listen(port,function(err){
-    if(err){console.log(err);
+    Contact.find({},function(err,Contacts){
+        if(err){console.log('Error in fetching contacts from db');
     return;}
-    console.log(" is running",port);
+    return res.render('home', {
+        title: "My Contacts list",
+        contact_list: Contacts
+    });
+});
+});
+
+app.get('/practice',function(req,res){
+   
+    return res.render('practice', {
+        title:"Let us play with ejs"
+    });
+});
+
+
+app.post('/create-contact', function(req,res){
+//    contactList.push({
+//     name: req.body.name,
+//     phone: req.body.phone
+//    });
+Contact.create({
+    name: req.body.name,
+    phone: req.body.phone
+},function(err,newContact){
+    if(err){console.log('error in creating contact');
+return;}
+console.log('*******',newContact);
+return res.redirect('back');
+});
+});
+
+// app.get('/delete-contact/:phone', function(req,res){
+//     console.log(req.params);
+//     let phone =req.params.phone;
+    
+    
+        
+// })
+app.listen(port,function(err){
+    if(err){console.log('Error in running the server',err);}
+    console.log('yup my server in port',port);
 })
-// const app = express();
-
-
-
-// app.get('/',function(err){
-//     res.send('cool,it is running');
-// })
-
-// app.listen(port,function(err){
-//     if(err){console.log('Error in running the server',err);}
-//     console.log('yup my server in port',port);
-// })

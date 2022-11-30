@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <title>
+            <%= locals.title%>
+        </title>
+        <script src="https://kit.fontawesome.com/1bee6d0830.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="/css/home.css"
+    </head>
+    <body>
+ <h1 id="page-heading">
+    <!-- <i class="fa-duotone fa-sparkles" style="color: #1c7ed6;"></i> -->
+    My Contact_list</h1>
+        <div>
+            <ul>
+                   
+                <% for (let i of contact_list) { %> 
+                    
+                    <li>
+                        <p><%= i.name %></p>
+                        <p><%= i.phone %></p>
+                    </li>
+                    
+                <% } %>
+            </ul>
+        </div>
+
+        <form action="/create-contact" method="POST">
+            <input type="text" name="name" placeholder="Enter name" required>
+            <input type="number" name="phone" placeholder="Enter phone" required>
+            <button type="submit">Add contact</button>
+        </form>
+
+
+        <script type="text/javascript" src="/js/home.js"></script>
+    </body>
+</html>
